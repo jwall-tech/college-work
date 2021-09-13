@@ -1,6 +1,13 @@
+###
+# Module Imports
+###
 import random
 import os
 
+###
+# Response Tree for bot responses depending on catagory
+# CATAGORY : POSSIBLE_RESPONSES
+###
 responseTree = {
     "Greetings" : ["Hey there!","Hiya!"],
     "Goodbye" : ["See you later!","Goodbye!"],
@@ -12,6 +19,10 @@ responseTree = {
     "QuestAns" : ["4","smelly"],
 }
 
+###
+# User Inputs that relate to certain responses
+# CATAGORY : POSSIBLE_USER_INPUTS
+###
 textResponses = {
     "Greetings" : ["hi","hello","hiya","sup","whatup"],
     "Goodbye" : ["bye","goodbye","see ya","laters"],
@@ -21,50 +32,49 @@ textResponses = {
     "Negative" : ["im bad","bad","terrible","crap","not good"],
 }
 
-BotName = "Billy"
-
-COLORS = {\
-    "black":"\u001b[30;1m",
-    "red": "\u001b[31;1m",
-    "green":"\u001b[32m",
-    "yellow":"\u001b[33;1m",
-    "blue":"\u001b[34;1m",
-    "magenta":"\u001b[35m",
-    "cyan": "\u001b[36m",
-    "white":"\u001b[37m",
-    "yellow-background":"\u001b[43m",
-    "black-background":"\u001b[40m",
-    "cyan-background":"\u001b[46;1m",
-    }
-    
-def colorText(text,color):
-    text = text.replace("[["+color+"]]",COLORS[color])
-    return text
-
+# Clears console screen
 def clearScreen():
     os.system("cls")
 
+# Gets user input
 def getUserInput():
     clearScreen()
-    print(colorText(BotName,"red"))
-    UserInput = input("\n>>> ")
-    return UserInput
+    print(BotName)
+    UserInput = input("\n>>> ") ## \n is the break line, starts the input text on a new line
+    return UserInput # Returns the input as a variable to wherever function was called
 
+###
+# Using classes just because im ard
+###
 class Chatty:
+    ###
+    # Init is a method
+    # __init__ is ran whenever a new class is initiated
+    ###
     def __init__(self,name):
         self.name = name
 
         ## Chatty Loop
+        ###
+        # Loop without an end, runs until program is closed
+        ###
         while True:
             uInput = getUserInput()
             if uInput == "--help":
+                # if user inputs --help then it prints all the user inputs
                 print(textResponses)
                 os.system("PAUSE")
             else:
+                # runs the get reply function, prints the reply and pauses the code
                 botReply = self.getReply(uInput)
                 print(self.name+": "+botReply)
                 os.system("PAUSE")
-            
+
+    ###
+    # This function loops through the two tables at the top of the code
+    # looks to see if the user input matches the tables and if it does then it either prints a response or does a thing
+    # the question bit asks the user a question with a new section and gives a response
+    ###
     def getReply(self,text):
         for catName in textResponses:
             catTable = textResponses[catName]
@@ -91,6 +101,9 @@ class Chatty:
                     response = responseTable[random.randint(0,len(responseTable)-1)]
                     return response
     
-
+###
+# Initiates the class Chatty
+# Pauses the code when the loop ends
+###
 myChatty = Chatty(BotName)
 os.system("PAUSE")

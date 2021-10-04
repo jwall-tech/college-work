@@ -6,8 +6,8 @@ import java.util.regex.*;
 
 public class responder {
 	
-	static String[] greetingPrefixes = {};
-	static String[] byePrefixes = {};
+	static String[] greetingPrefixes = {"hi","hello"};
+	static String[] byePrefixes = {"bye","goodbye"};
 	
 	/*
 	 Module Functions 
@@ -42,6 +42,11 @@ public class responder {
 	
 	private static boolean checkExistsInTable(String input, String table[]) 
 	{
-		return false;
+                for (int i = 0;i <= table.length-1;i++) {
+                    if (utils.match(input.toLowerCase(),table[i])) {
+                        return true;
+                    }
+                }
+                return false;
 	}
 }

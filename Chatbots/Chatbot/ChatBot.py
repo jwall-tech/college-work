@@ -3,6 +3,7 @@
 ###
 import random
 import os
+import pyttsx3
 
 ###
 # Response Tree for bot responses depending on catagory
@@ -53,7 +54,8 @@ class Chatty:
     ###
     def __init__(self,name):
         self.name = name
-
+        self.engine = pyttsx3.init()
+        
         ## Chatty Loop
         ###
         # Loop without an end, runs until program is closed
@@ -68,6 +70,8 @@ class Chatty:
                 # runs the get reply function, prints the reply and pauses the code
                 botReply = self.getReply(uInput)
                 print(self.name+": "+botReply)
+                self.engine.say(botReply)
+                self.engine.runAndWait()
                 os.system("PAUSE")
 
     ###
@@ -105,5 +109,6 @@ class Chatty:
 # Initiates the class Chatty
 # Pauses the code when the loop ends
 ###
+BotName = "BDOG"
 myChatty = Chatty(BotName)
 os.system("PAUSE")

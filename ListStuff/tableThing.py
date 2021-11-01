@@ -29,7 +29,7 @@ global rowLength
 nextRows = []
 rowLength = 0
 hasNext = False
-
+print("_______________________________________________________________________")
 def isEmpty(tbl):
     empty = True
     for item in tbl:

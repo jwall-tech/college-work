@@ -99,7 +99,7 @@ def getClass(name):
 
 def DisplayMenu():
     print("Shapes")
-    print("Circle,Triangle,Square,Rectangle,Cube,Rhombus")
+    print("Circle,Triangle,Square,Rectangle,Cube,Rhombus,Cher")
     uInput = input(">>> ")
     Class = getClass(uInput)
     if Class:

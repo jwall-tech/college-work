@@ -1,0 +1,41 @@
+FUNCTION smallest_numb (numb1,numb2,numb3) {
+	if numb1 < numb2 {
+		if numb1 < numb3 {
+			return numb1
+		}
+		return numb3;
+	}else {
+		if numb2 < numb3 {
+			return numb2
+		}
+		return numb3
+	}
+	return 0
+}
+
+FUNCTION smallest_table(table) {
+	endNumber;
+	for number in table {
+		if endNumber {
+			if number < endNumber {
+				endNumber = number
+			}
+		}else {
+			endNumber = number
+		}
+	}
+	return endNumber
+}
+
+
+FUNCTION search(table,value) {
+	index = 0
+	
+	for item in table {
+		index += 1
+		if item == value {
+			return index
+		}
+	}
+	return 0
+}

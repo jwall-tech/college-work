@@ -1,0 +1,15 @@
+function factorial ( n )
+	if n less than 0 then
+		return "negative"
+	else if n is 0 then
+		return 1
+	else
+		if n - 1 less than or is 0 then
+			return n
+		else
+			return n * factorial(n-1)
+		endif
+	endif
+endfunction
+
+factorial(5)

@@ -1,11 +1,12 @@
 ##################
 # Module Imports #
 ##################
-
+import re
+import random
 ##################
 # Variables      #
 ##################
-
+date = "15/11/2021"
 ##################
 # Functions      #
 ##################
@@ -95,21 +96,30 @@ def PrintMenu():
     print("2. Display Summary of Policies")
     print("3. Display Summary of Policies for Selected Month")
     print("4. Find and display Policy")
+    print("5. Debug Add Random")
     print("0. Exit")
 
-def NewPolicy():
-    print("Input in order (client name,reference,number of gadgets,most expensive gadget value,excess,payment terms")
-    UserInput = input(">>> ")
+def NewPolicy(i=None,d=None):
+    print("Input in order (client name (John H Smith),reference (JB123A) ,number of gadgets,most expensive gadget value,excess,payment terms")
+    UserInput = i or input(">>> ")
     InputTable = UserInput.split(",")
+
+    RefNumb = InputTable[1]
+
+    pattern = r"\D\D\d\d\d\D"
+
+    if not re.match(pattern,RefNumb):
+        print("WRONG FORMAT MUST BE 2 LETTERS, 3 NUMBERS, 1 LETTER EXAMPLE: JB123A")
+        return None
     
     Prem = WorkOutPremium(int(InputTable[2]),int(InputTable[3]),int(InputTable[4]),InputTable[5])
     if Prem:
-        PrintSummary(InputTable[0],"08/11/2021",InputTable[5],int(InputTable[4]),Prem,1000,InputTable[1],int(InputTable[2]))
+        PrintSummary(InputTable[0],d or date,InputTable[5],int(InputTable[4]),Prem,1000,RefNumb,int(InputTable[2]))
     else:
         Prem = 0
         InputTable[5] = "REJECTED"
     InputTable.append(str(Prem))
-    InputTable.append(str("08/11/2021"))
+    InputTable.append(str(d or date))
     with open("policy.txt","a") as f:
         f.write("\n")
         index = 0
@@ -173,21 +183,21 @@ def SummaryOfPolicies():
             _itemsInt = 0
             _mPremInt = 0
             for line in lines:
-                check = line.split(" ")
+                if not line == "" and not line == "\n":
+                    check = line.split(" ")
+                    items = check[2]
+                    premium = check[6]
+                    date = check[7]
 
-                items = check[2]
-                premium = check[6]
-                date = check[7]
+                    date_split = date.split("/")
+                    date_month = date_split[1]
+                    date_day = date_split[0]
+                    date_year = date_split[2]
 
-                date_split = date.split("/")
-                date_month = date_split[1]
-                date_day = date_split[0]
-                date_year = date_split[2]
-
-                _perMonth[date_month] += 1
-                
-                _mPremInt += bool(premium)
-                _itemsInt += int(items)
+                    _perMonth[date_month] += 1
+                    
+                    _mPremInt += bool(premium)
+                    _itemsInt += int(items)
 
             Total = len(lines)
             Average = round(_itemsInt / Total,2)
@@ -210,7 +220,133 @@ def SummaryOfPolicies():
                     print(_perMonth[name],end="   ")
                 
             print("\n")
-            
+
+def MonthPolicies():
+    fileName = input("archive or policy\n>>> ")
+    month = input("month\n>>> ")
+    if fileName == "archive" or fileName == "policy":
+        with open(fileName+".txt") as f:
+            lines = f.readlines()
+            f.close()
+
+            _itemsInt = 0
+            _mPremInt = 0
+            Total = 1
+            for line in lines:
+                check = line.split(" ")
+
+                items = check[2]
+                premium = check[6]
+                date = check[7]
+
+                date_split = date.split("/")
+                date_month = date_split[1]
+                date_day = date_split[0]
+                date_year = date_split[2]
+
+                if date_month == month:
+                    Total += 1
+                    _mPremInt += bool(premium)
+                    _itemsInt += int(items)
+
+            Average = round(_itemsInt / Total,2)
+            Average_Premium = round(_mPremInt / Total,2)
+
+            print("Total Number of policies: "+str(Total-1))
+            print("Average number of items (Accepted): "+str(Average))
+            print("Averge Premium: "+str(Average_Premium))
+            print("Number of Policies Per Month: \n")
+                
+            print("\n")
+
+def FindDisplay():
+    fileName = input("archive or policy\n>>> ")
+    st = input("search term\n>>> ")
+    if fileName == "archive" or fileName == "policy":
+        with open(fileName+".txt") as f:
+            lines = f.readlines()
+            f.close()
+
+            for line in lines:
+                userData = line.split(" ")
+
+                for dataPiece in userData:
+                    for ind in range(len(dataPiece)-1):
+                        if len(dataPiece) > ind:
+                            if dataPiece[ind] == ",":
+                                dataPiece = dataPiece[:ind+1] + " " + dataPiece[:ind-1]
+
+                ClientName = userData[0]
+                s1 = ClientName.split(",")
+                ClientName = s1[0]+" "+s1[1]
+                RefNumb = userData[1]
+                
+                check = line.split(" ")
+
+                items = check[2]
+                premium = check[6]
+                date = check[7]
+
+                date_split = date.split("/")
+                date_month = date_split[1]
+                date_day = date_split[0]
+                date_year = date_split[2]
+
+                if re.search(st,RefNumb) or re.match(st,ClientName):
+                    PrintSummary(ClientName,date,"Annual",int(check[4]),bool(premium),1000,RefNumb,int(items))
+
+def RandomAdd():
+    fNames = ["John","James","Marco","Jacob","Moritz","Duncan","Chloe"]
+    lNames = ["Smith","Wallace","Divine","Skilton","Corny","Jermy"]
+
+    Letters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z"
+    Letters = Letters.split(",")
+
+    payTerms = ["annual","monthly"]
+
+    for i in range(20):
+        Name = random.choice(fNames) + " " + random.choice(lNames)
+        Ref = ""
+        
+        for i in range(2):
+            Ref = Ref + random.choice(Letters)
+
+        for i in range(3):
+            Ref = Ref + str(random.randint(1,9))
+
+        Ref = Ref + random.choice(Letters)
+
+        Gadg = random.randint(1,1000)
+
+        expens = random.randint(1,200)
+
+        exc = random.randint(1,70)
+
+        term = random.choice(payTerms)
+
+        inpString = Name+","+Ref+","+str(Gadg)+","+str(expens)+","+str(exc)+","+str(term)
+
+        m = random.randint(1,12)
+        if m < 10:
+            m = "0"+str(m)
+        else:
+            m = str(m)
+
+        d = random.randint(1,30)
+
+        if d < 10:
+            d = "0"+str(d)
+        else:
+            d = str(d)
+        
+        date = d+"/"+m+"/"+"2021"
+        
+        NewPolicy(i=inpString,d=date)
+
+    #ArchivePolicy()
+    #exit()
+
+
 while True:
     PrintMenu()
 
@@ -223,3 +359,9 @@ while True:
         exit()
     elif UInput == "2":
         SummaryOfPolicies()
+    elif UInput == "3":
+        MonthPolicies()
+    elif UInput == "4":
+        FindDisplay()
+    elif UInput == "5":
+        RandomAdd()

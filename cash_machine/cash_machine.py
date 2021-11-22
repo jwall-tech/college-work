@@ -31,17 +31,20 @@ myAtm = ATM()
 
 while True:
     print("\n\n\n")
-    myAtm.display()
-    uInput = input(">>> ")
-    if uInput == "1":
-        newInput = input("Amount\n>>> ")
-        newInput = int(newInput)
-        print(myAtm.deposit(newInput)[1])
-        
-    elif uInput == "2":
-        newInput = input("Amount\n>>> ")
-        newInput = int(newInput)
-        print(myAtm.withdraw(newInput)[1])
+    if myAtm.open:
+        myAtm.display()
+        uInput = input(">>> ")
+        if uInput == "1":
+            newInput = input("Amount\n>>> ")
+            newInput = int(newInput)
+            print(myAtm.deposit(newInput)[1])
+            
+        elif uInput == "2":
+            newInput = input("Amount\n>>> ")
+            newInput = int(newInput)
+            print(myAtm.withdraw(newInput)[1])
 
-    elif uInput == "3":
-        exit()
+        elif uInput == "3":
+            exit()
+    else:
+        myAtm.requestOpen(input("Pin\n>>> "))

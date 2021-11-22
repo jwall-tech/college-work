@@ -1,0 +1,24 @@
+function binary(list,target)
+	get middle of list
+	if middle is > target
+	binary(left of list, target)
+	else if middle is < target
+	binary(right of list, target)
+	else if middle is target
+	return True
+	
+function binarySearch(list,target)
+	set max,min = length(list),0
+	
+	if max <= min return -1 end
+	
+	average of min and max
+	
+	if list[average] is target return average end
+	
+	if list[average] is less than target then min = average + 1 end
+	
+	if list[average] is greater than target then max = average-1 end
+	
+	binarySearch(list[min,max],target)
+end

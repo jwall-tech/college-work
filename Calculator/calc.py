@@ -38,6 +38,8 @@ class Calcy():
             return self.Divide(*args)
         elif operator == "*":
             return self.Multiply(*args)
+        elif operator == "^":
+            return self.Power(*args)
 
     def Add(self,num1,num2):
         return num1 + num2
@@ -54,5 +56,8 @@ class Calcy():
 
     def Subtract(self,num1,num2):
         return num1 - num2
+        
+    def Power(self,num1,num2):
+        return num1 ** num2
 
 CalcyBoy = Calcy()
